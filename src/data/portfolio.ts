@@ -66,6 +66,7 @@ export type SiteProfile = {
     handle: string
     url: string
   }
+  linkedin?: string
   email?: string
   phone?: string
   address?: string
@@ -79,6 +80,7 @@ export const siteProfile: SiteProfile = {
     handle: 'tallbreadstick',
     url: 'https://github.com/tallbreadstick',
   },
+  linkedin: 'https://www.linkedin.com/in/jeremiah-ramos-75968124a/',
   email: 'ramosthjeremiah@gmail.com',
   phone: '+63 968 611 9340',
   address: 'Sambag II, Cebu City, Cebu, Philippines',

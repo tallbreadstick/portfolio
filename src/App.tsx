@@ -183,6 +183,22 @@ export default function App() {
                   github.com/{githubHandle()}
                 </a>
               </li>
+              <Show when={siteProfile.linkedin}>
+                {(linkedin) => (
+                  <li class="min-w-0 break-words">
+                    <span class="text-accent-dim">linkedin</span>
+                    <span class="text-text-dim"> :: </span>
+                    <a
+                      href={linkedin()}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      class="text-accent hover:text-text-bright underline-offset-2 hover:underline"
+                    >
+                      linkedin.com/in/jeremiah-ramos-75968124a
+                    </a>
+                  </li>
+                )}
+              </Show>
               <Show when={siteProfile.resumeSrc}>
                 {(resumeSrc) => (
                   <li>
