@@ -11,6 +11,7 @@ import {
   certifications,
   experiences,
   siteProfile,
+  assetUrl,
 } from './data/portfolio'
 
 export default function App() {
@@ -62,7 +63,7 @@ export default function App() {
             <div class="relative mx-auto w-full min-w-0 max-w-full lg:mx-0 lg:w-fit lg:justify-self-end">
               <div class="relative w-full max-w-full lg:w-fit">
                 <img
-                  src="/myself.png"
+                  src={assetUrl('/myself.png')}
                   alt={siteProfile.name}
                   class="hero-photo mx-auto block h-auto w-full max-w-full max-h-[min(52vh,420px)] sm:max-h-[min(65vh,560px)] sm:w-auto lg:max-h-[min(78vh,720px)]"
                   loading="eager"
@@ -188,7 +189,7 @@ export default function App() {
                     <span class="text-accent-dim">resume</span>
                     <span class="text-text-dim"> :: </span>
                     <a
-                      href={resumeSrc()}
+                      href={assetUrl(resumeSrc())}
                       target="_blank"
                       rel="noopener noreferrer"
                       class="text-accent hover:text-text-bright underline-offset-2 hover:underline"

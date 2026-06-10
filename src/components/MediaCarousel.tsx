@@ -1,4 +1,4 @@
-import type { MediaItem } from '../data/portfolio'
+import { assetUrl, type MediaItem } from '../data/portfolio'
 import { createSignal, For, Show } from 'solid-js'
 import ImageLightbox from './ImageLightbox'
 
@@ -19,6 +19,7 @@ function MediaSlot(props: {
   onExpand?: () => void
 }) {
   const hasSrc = () => Boolean(props.item.src?.trim())
+  const mediaSrc = () => assetUrl(props.item.src!.trim())
   const portrait = () => props.mediaFit === 'portrait'
   const expandable = () =>
     Boolean(props.lightbox && props.item.type === 'image' && hasSrc())
@@ -60,7 +61,7 @@ function MediaSlot(props: {
             when={props.item.type === 'video'}
             fallback={
               <img
-                src={props.item.src}
+                src={mediaSrc()}
                 alt={props.item.alt ?? 'media'}
                 class={coverClass()}
                 loading="lazy"
@@ -69,7 +70,7 @@ function MediaSlot(props: {
             }
           >
             <video
-              src={props.item.src}
+              src={mediaSrc()}
               class={coverClass()}
               controls
               muted
@@ -87,7 +88,7 @@ function MediaSlot(props: {
             when={props.item.type === 'video'}
             fallback={
               <img
-                src={props.item.src}
+                src={mediaSrc()}
                 alt={props.item.alt ?? 'media'}
                 class="h-full w-auto max-w-full object-contain"
                 loading="lazy"
@@ -95,7 +96,7 @@ function MediaSlot(props: {
             }
           >
             <video
-              src={props.item.src}
+              src={mediaSrc()}
               class="h-full w-auto max-w-full object-contain"
               controls
               muted
@@ -327,7 +328,7 @@ export default function MediaCarousel(props: MediaCarouselProps) {
       <Show when={props.lightbox && currentItem().src}>
         <ImageLightbox
           open={lightboxOpen()}
-          src={currentItem().src!}
+          src={assetUrl(currentItem().src!)}
           alt={currentItem().alt ?? 'Photo'}
           onClose={() => setLightboxOpen(false)}
         />

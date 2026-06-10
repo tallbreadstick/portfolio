@@ -51,6 +51,15 @@ export function skillIconUrl(iconId: string) {
   return `${SKILL_ICONS_BASE}?i=${iconId}&theme=dark`
 }
 
+/** Prefix public asset paths with Vite base URL (e.g. /portfolio/ on GitHub Pages). */
+export function assetUrl(path: string) {
+  if (!path || path.startsWith('http://') || path.startsWith('https://')) {
+    return path
+  }
+  if (!path.startsWith('/')) return path
+  return `${import.meta.env.BASE_URL}${path.slice(1)}`
+}
+
 export type SiteProfile = {
   name: string
   github: {

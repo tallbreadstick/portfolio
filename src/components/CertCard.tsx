@@ -1,4 +1,4 @@
-import type { Certification } from '../data/portfolio'
+import { assetUrl, type Certification } from '../data/portfolio'
 import { Show } from 'solid-js'
 
 type CertCardProps = {
@@ -29,7 +29,7 @@ export default function CertCard(props: CertCardProps) {
           }
         >
           <img
-            src={props.cert.imageSrc}
+            src={assetUrl(props.cert.imageSrc!)}
             alt={props.cert.title}
             class="h-full w-full object-contain p-2"
             loading="lazy"
