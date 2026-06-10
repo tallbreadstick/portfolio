@@ -8,7 +8,7 @@ type SectionProps = {
 
 export default function Section(props: SectionProps) {
   return (
-    <section id={props.id} class="scroll-mt-20 border-t border-border py-16">
+    <section id={props.id} class="scroll-mt-16 border-t border-border py-10 sm:scroll-mt-20 sm:py-16">
       <div class="mb-10">
         <p class="text-accent-dim text-xs tracking-[0.35em] uppercase">
           {'// section'}

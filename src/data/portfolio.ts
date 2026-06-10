@@ -231,8 +231,8 @@ export const projects: Project[] = [
 export const certifications: Certification[] = [
   {
     id: 'philnits-fe',
-    title: 'PhilNits FE Passer',
-    issuer: 'PhilNits',
+    title: 'PhilNITS FE Passer',
+    issuer: 'PhilNITS',
     year: '2026',
     imageSrc: '/certs/philnits-fe.png',
     href: 'https://philnits.org/passers-fe/',

@@ -21,15 +21,15 @@ export default function App() {
     <div class="bg-bg text-text min-h-screen">
       <Nav />
 
-      <main class="page-shell pb-24">
+      <main class="page-shell min-w-0 pb-16 sm:pb-24">
         {/* Hero */}
-        <header id="about" class="scroll-mt-20 py-16 xl:py-20">
-          <div class="grid items-center gap-10 lg:grid-cols-[minmax(0,1fr)_auto] lg:gap-10 xl:gap-14">
-            <div>
-              <p class="text-accent font-mono text-xs tracking-[0.4em] uppercase">
+        <header id="about" class="scroll-mt-16 py-10 sm:scroll-mt-20 sm:py-16 xl:py-20">
+          <div class="grid min-w-0 items-center gap-8 sm:gap-10 lg:grid-cols-[minmax(0,1fr)_auto] lg:gap-10 xl:gap-14">
+            <div class="min-w-0">
+              <p class="text-accent font-mono text-[10px] tracking-[0.25em] uppercase sm:text-xs sm:tracking-[0.4em]">
                 // about
               </p>
-              <h1 class="text-text-bright mt-4 font-mono text-3xl tracking-tight sm:text-4xl xl:text-5xl">
+              <h1 class="text-text-bright mt-3 font-mono text-2xl tracking-tight sm:mt-4 sm:text-3xl sm:text-4xl xl:text-5xl">
                 [ {siteProfile.name.toUpperCase()} ]
               </h1>
               <p class="mt-3 font-mono text-sm">
@@ -51,7 +51,7 @@ export default function App() {
                 Rust enthusiast. NixOS user.
               </p>
 
-              <div class="border-border mt-10 inline-block border px-4 py-3 font-mono text-xs">
+              <div class="border-border mt-8 inline-block max-w-full border px-4 py-3 font-mono text-xs sm:mt-10">
                 <span class="text-accent">status</span>
                 <span class="text-text-dim"> :: </span>
                 <span class="text-text-bright">{siteProfile.status}</span>
@@ -59,12 +59,12 @@ export default function App() {
               </div>
             </div>
 
-            <div class="relative mx-auto w-fit max-w-full lg:mx-0 lg:justify-self-end">
-              <div class="relative w-fit max-w-full">
+            <div class="relative mx-auto w-full min-w-0 max-w-full lg:mx-0 lg:w-fit lg:justify-self-end">
+              <div class="relative w-full max-w-full lg:w-fit">
                 <img
                   src="/myself.png"
                   alt={siteProfile.name}
-                  class="hero-photo block h-auto w-auto max-h-[min(78vh,720px)] max-w-full"
+                  class="hero-photo mx-auto block h-auto w-full max-w-full max-h-[min(52vh,420px)] sm:max-h-[min(65vh,560px)] sm:w-auto lg:max-h-[min(78vh,720px)]"
                   loading="eager"
                 />
                 <div
@@ -82,10 +82,10 @@ export default function App() {
             Primary languages and tools. I have worked with other stacks, but
             these are where I have the most depth.
           </p>
-          <ul class="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-[repeat(auto-fill,minmax(9.25rem,1fr))]">
+          <ul class="grid min-w-0 grid-cols-2 gap-2.5 sm:grid-cols-3 sm:gap-3 md:grid-cols-4 lg:grid-cols-[repeat(auto-fill,minmax(9.25rem,1fr))]">
             <For each={techStack}>
               {(item) => (
-                <li class="border-border bg-surface hover:border-accent-dim flex min-h-[6.75rem] flex-col items-center justify-center gap-2.5 border px-3 py-4 text-center font-mono transition-colors">
+                <li class="border-border bg-surface hover:border-accent-dim flex min-h-[6rem] flex-col items-center justify-center gap-2 border px-2 py-3 text-center font-mono transition-colors sm:min-h-[6.75rem] sm:gap-2.5 sm:px-3 sm:py-4">
                   <img
                     src={skillIconUrl(item.icon)}
                     alt=""
@@ -140,11 +140,11 @@ export default function App() {
 
         {/* Contact */}
         <Section id="contact" title="contact">
-          <div class="border-border bg-surface border p-6 font-mono text-sm xl:p-8">
-            <ul class="flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:gap-x-12 sm:gap-y-3">
+          <div class="border-border bg-surface min-w-0 border p-4 font-mono text-sm sm:p-6 xl:p-8">
+            <ul class="flex min-w-0 flex-col gap-3 sm:flex-row sm:flex-wrap sm:gap-x-12 sm:gap-y-3">
               <Show when={siteProfile.email}>
                 {(email) => (
-                  <li>
+                  <li class="min-w-0 break-words">
                     <span class="text-accent-dim">email</span>
                     <span class="text-text-dim"> :: </span>
                     <a
@@ -158,7 +158,7 @@ export default function App() {
               </Show>
               <Show when={siteProfile.phone}>
                 {(phone) => (
-                  <li>
+                  <li class="min-w-0">
                     <span class="text-accent-dim">phone</span>
                     <span class="text-text-dim"> :: </span>
                     <a
@@ -170,7 +170,7 @@ export default function App() {
                   </li>
                 )}
               </Show>
-              <li>
+              <li class="min-w-0 break-words">
                 <span class="text-accent-dim">github</span>
                 <span class="text-text-dim"> :: </span>
                 <a
@@ -200,7 +200,7 @@ export default function App() {
               </Show>
               <Show when={siteProfile.address}>
                 {(address) => (
-                  <li class="w-full basis-full">
+                  <li class="w-full min-w-0 basis-full break-words">
                     <span class="text-accent-dim">address</span>
                     <span class="text-text-dim"> :: </span>
                     <span class="text-text">{address()}</span>
@@ -211,7 +211,7 @@ export default function App() {
           </div>
         </Section>
 
-        <footer class="border-border text-text-dim border-t py-8 text-center font-mono text-[10px] tracking-widest uppercase">
+        <footer class="border-border text-text-dim border-t py-8 pb-[max(2rem,env(safe-area-inset-bottom))] text-center font-mono text-[10px] leading-relaxed tracking-widest uppercase">
           built with solidjs · Jeremiah Ramos © {new Date().getFullYear()}
         </footer>
       </main>

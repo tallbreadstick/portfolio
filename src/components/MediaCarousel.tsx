@@ -29,7 +29,7 @@ function MediaSlot(props: {
     [
       props.compact
         ? 'border-border aspect-[4/3] w-full border object-contain bg-bg'
-        : 'border-border aspect-video w-full border object-cover',
+        : 'border-border aspect-video w-full border object-contain bg-black sm:object-cover',
       expandable() ? 'cursor-zoom-in' : '',
     ].join(' ')
 
@@ -145,11 +145,26 @@ export default function MediaCarousel(props: MediaCarouselProps) {
     }
   }
 
+  let touchStartX = 0
+
+  const onTouchStart = (e: TouchEvent) => {
+    touchStartX = e.touches[0]?.clientX ?? 0
+  }
+
+  const onTouchEnd = (e: TouchEvent) => {
+    if (!hasMultiple()) return
+    const endX = e.changedTouches[0]?.clientX ?? touchStartX
+    const delta = endX - touchStartX
+    if (Math.abs(delta) < 48) return
+    if (delta > 0) prev()
+    else next()
+  }
+
   return (
     <div class="border-border bg-surface border">
       <Show when={!compact()}>
-        <div class="border-border flex flex-wrap items-center justify-between gap-2 border-b px-3 py-2">
-          <span class="text-text-dim font-mono text-[10px] tracking-widest uppercase">
+        <div class="border-border flex flex-wrap items-center justify-between gap-2 border-b px-2 py-2 sm:px-3">
+          <span class="text-text-dim max-w-[55%] truncate font-mono text-[10px] tracking-widest uppercase sm:max-w-none">
             {props.label} :: media_viewer
           </span>
           <Show when={hasMultiple()}>
@@ -160,8 +175,8 @@ export default function MediaCarousel(props: MediaCarouselProps) {
         </div>
 
         <Show when={hasMultiple()}>
-          <p class="border-border text-accent-dim border-b px-3 py-1.5 text-center font-mono text-[10px] tracking-wide uppercase">
-            ◂ {count()} items — use arrows or tabs below ▸
+          <p class="border-border text-accent-dim hidden border-b px-3 py-1.5 text-center font-mono text-[10px] tracking-wide uppercase sm:block">
+            swipe or use arrows / tabs below
           </p>
         </Show>
       </Show>
@@ -179,9 +194,11 @@ export default function MediaCarousel(props: MediaCarouselProps) {
 
       <div class={compact() ? 'p-1' : 'p-2'}>
         <div
-          class="relative"
+          class="relative touch-pan-y"
           tabIndex={hasMultiple() ? 0 : undefined}
           onKeyDown={onKeyDown}
+          onTouchStart={onTouchStart}
+          onTouchEnd={onTouchEnd}
           role={hasMultiple() ? 'region' : undefined}
           aria-roledescription={hasMultiple() ? 'carousel' : undefined}
           aria-label={

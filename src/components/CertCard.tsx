@@ -53,7 +53,7 @@ export default function CertCard(props: CertCardProps) {
               href={href()}
               target="_blank"
               rel="noopener noreferrer"
-              class="text-accent hover:text-text-bright mt-auto pt-3 font-mono text-[10px] underline-offset-2 hover:underline"
+              class="text-accent hover:text-text-bright mt-auto break-all pt-3 font-mono text-[10px] underline-offset-2 hover:underline"
             >
               verify :: {linkDisplayPath(href())}
             </a>
