@@ -82,7 +82,7 @@ export const siteProfile: SiteProfile = {
   email: 'ramosthjeremiah@gmail.com',
   phone: '+63 968 611 9340',
   address: 'Sambag II, Cebu City, Cebu, Philippines',
-  resumeSrc: 'TBA',
+  resumeSrc: '/docs/Jeremiah Ramos - Resume.pdf',
   status: 'seeking interesting problems',
 }
 

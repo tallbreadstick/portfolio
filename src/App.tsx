@@ -44,7 +44,7 @@ export default function App() {
                 </a>
               </p>
               <p class="text-text mt-6 font-mono text-sm leading-relaxed xl:text-base">
-                Incoming fourth-year BSIT student at Cebu Institute of
+                Fourth-year BSIT student and DOST-SEI scholar at the Cebu Institute of
                 Technology - University. I build CLIs, desktop tools, game
                 plugins, security tooling, and whatever other interesting projects I can think of.
               </p>
@@ -213,7 +213,7 @@ export default function App() {
         </Section>
 
         <footer class="border-border text-text-dim border-t py-8 pb-[max(2rem,env(safe-area-inset-bottom))] text-center font-mono text-[10px] leading-relaxed tracking-widest uppercase">
-          built with solidjs · Jeremiah Ramos © {new Date().getFullYear()}
+          built with solidjs · © Jeremiah Ramos {new Date().getFullYear()}
         </footer>
       </main>
     </div>
