@@ -14,11 +14,11 @@ export type Project = {
   media: MediaItem[]
   /** Portrait images: fit to frame height, letterbox with black */
   mediaFit?: 'cover' | 'portrait'
-  credit?: {
+  credits?: {
     label: string
     name: string
     href: string
-  }
+  }[]
 }
 
 export type Certification = {
@@ -48,6 +48,9 @@ export type TechStackItem = {
 export const SKILL_ICONS_BASE = 'https://go-skill-icons.vercel.app/api/icons'
 
 export function skillIconUrl(iconId: string) {
+  if (iconId === 'cursor') {
+    return assetUrl('/icons/cursor.svg')
+  }
   return `${SKILL_ICONS_BASE}?i=${iconId}&theme=dark`
 }
 
@@ -102,6 +105,7 @@ export const techStack: TechStackItem[] = [
   { name: 'PostgreSQL', icon: 'postgresql' },
   { name: 'Tailwind CSS', icon: 'tailwindcss' },
   { name: 'VS Code', icon: 'vscode' },
+  { name: 'Cursor', icon: 'cursor' },
 ]
 
 export const projects: Project[] = [
@@ -128,6 +132,44 @@ export const projects: Project[] = [
         type: 'image',
         src: '/media/ariadne/ariadne-2.png',
         alt: 'Sensitive data exposure in AuthController with session metrics',
+      },
+    ],
+  },
+  {
+    id: 'liga',
+    name: 'LIGA',
+    period: '2026',
+    repo: 'https://github.com/tallbreadstick/LIGA',
+    stack: ['Java', 'libGDX', 'Cross-platform', '2.5D'],
+    description:
+      'Cross-platform 2.5D game. Team entry for DOST NEXT LEVEL: Esports Game Dev Challenge 2026. Built for the national esports game development track; did not place, but represents our latest shipped gameplay and trailer work.',
+    credits: [
+      {
+        label: 'Art by',
+        name: 'renzymigz',
+        href: 'https://github.com/renzymigz',
+      },
+      {
+        label: 'Music by',
+        name: 'xennkavier13',
+        href: 'https://github.com/xennkavier13',
+      },
+    ],
+    media: [
+      {
+        type: 'video',
+        src: '/media/liga/liga-highlight.mp4',
+        alt: 'LIGA gameplay highlight',
+      },
+      {
+        type: 'video',
+        src: '/media/liga/liga-trailer.mp4',
+        alt: 'LIGA game trailer',
+      },
+      {
+        type: 'video',
+        src: '/media/liga/liga-demo.mp4',
+        alt: 'LIGA gameplay demo',
       },
     ],
   },
@@ -214,11 +256,13 @@ export const projects: Project[] = [
     stack: ['Java', 'libGDX', 'LWJGL', 'Spatial Hashing'],
     description:
       'Top-down pixel-art shooter, final project for Object-Oriented Programming 2, 2nd semester of 2nd year. Built in Java with libGDX. Collision detection uses spatial hashing. Team effort; unmaintained since early 2025.',
-    credit: {
-      label: 'Pixel art by',
-      name: 'renzymigz',
-      href: 'https://github.com/renzymigz',
-    },
+    credits: [
+      {
+        label: 'Pixel art by',
+        name: 'renzymigz',
+        href: 'https://github.com/renzymigz',
+      },
+    ],
     media: [
       {
         type: 'video',
@@ -398,6 +442,25 @@ export const experiences: Experience[] = [
         type: 'image',
         src: '/experience/eygds-2026.jpg',
         alt: 'EY GDS ServiceNow finalist certificate',
+      },
+    ],
+  },
+  {
+    id: 'dict-psc-2026',
+    title: 'DICT Philippine Startup Challenge',
+    year: '2026',
+    detail: 'Central Visayas Top 25 qualifier (Ariadne)',
+    href: 'https://www.facebook.com/photo/?fbid=1569344298570752&set=pcb.1569367565235092',
+    media: [
+      {
+        type: 'image',
+        src: '/experience/psc-2026-team.jpg',
+        alt: 'Team the opps at PSC Region VII qualifiers backdrop',
+      },
+      {
+        type: 'image',
+        src: '/experience/psc-2026-ariadne.jpg',
+        alt: 'Ariadne Top 25 qualifier announcement graphic',
       },
     ],
   },

@@ -1,5 +1,5 @@
 import type { Project } from '../data/portfolio'
-import { For, Show } from 'solid-js'
+import { For } from 'solid-js'
 import MediaCarousel from './MediaCarousel'
 
 type ProjectCardProps = {
@@ -52,22 +52,28 @@ export default function ProjectCard(props: ProjectCardProps) {
           <p class="text-text text-sm leading-relaxed font-mono">
             {props.project.description}
           </p>
-          <Show when={props.project.credit}>
-            {(credit) => (
-              <p class="text-text-dim mt-3 font-mono text-xs">
-                {credit().label}{' '}
+          <For each={props.project.credits}>
+            {(credit, i) => (
+              <p
+                class="text-text-dim font-mono text-xs"
+                classList={{
+                  'mt-3': i() === 0,
+                  'mt-1': i() > 0,
+                }}
+              >
+                {credit.label}{' '}
                 <a
-                  href={credit().href}
+                  href={credit.href}
                   target="_blank"
                   rel="noopener noreferrer"
                   class="text-accent hover:text-text-bright underline-offset-2 hover:underline"
                 >
-                  {credit().name}
+                  {credit.name}
                 </a>
                 .
               </p>
             )}
-          </Show>
+          </For>
           <ul class="mt-4 flex flex-wrap gap-2">
             <For each={props.project.stack}>
               {(tag) => (
