@@ -243,28 +243,6 @@ export const projects: Project[] = [
     ],
   },
   {
-    id: 'hexcell',
-    name: 'HexCell Calculator',
-    period: '2024',
-    repo: 'https://github.com/tallbreadstick/hexcell-android',
-    stack: ['Rust', 'Tauri', 'SolidJS', 'Android'],
-    mediaFit: 'portrait',
-    description:
-      'First complete project, built 2nd semester of 1st year for Introduction to Computer Systems. Android number-system conversion solver in Rust via Tauri. Convert between binary, octal, decimal, and hex; batch rows with convert/swap/clear; step-by-step breakdowns so you see the math, not just the answer.',
-    media: [
-      {
-        type: 'image',
-        src: '/media/hexcell/hexcell-1.png',
-        alt: 'Multi-row conversion workspace',
-      },
-      {
-        type: 'image',
-        src: '/media/hexcell/hexcell-2.png',
-        alt: 'Binary to decimal with step-by-step breakdown',
-      },
-    ],
-  },
-  {
     id: 'endzone-echo',
     name: 'Endzone Echo',
     period: '2025',

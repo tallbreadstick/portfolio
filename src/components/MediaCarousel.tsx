@@ -7,6 +7,7 @@ import {
   onMount,
   Show,
 } from 'solid-js'
+import { claimVideoPlayback } from '../lib/exclusiveVideoPlayback'
 import ImageLightbox from './ImageLightbox'
 
 type MediaCarouselProps = {
@@ -36,7 +37,11 @@ function CarouselVideo(props: {
     }
   })
 
-  const onPlay = () => setShowPoster(false)
+  const onPlay = () => {
+    const el = videoEl
+    if (el) claimVideoPlayback(el)
+    setShowPoster(false)
+  }
 
   const onPause = () => {
     const el = videoEl
