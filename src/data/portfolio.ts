@@ -2,6 +2,8 @@ export type MediaItem = {
   type: 'image' | 'video'
   src?: string
   alt?: string
+  /** Optional poster image; defaults to `<video>.mp4` → `<video>-poster.jpg` */
+  poster?: string
 }
 
 export type Project = {
@@ -63,6 +65,16 @@ export function assetUrl(path: string) {
   return `${import.meta.env.BASE_URL}${path.slice(1)}`
 }
 
+/** Poster JPEG alongside each portfolio MP4 (`foo.mp4` → `foo-poster.jpg`). */
+export function videoPosterUrl(item: MediaItem): string | undefined {
+  if (item.type !== 'video') return undefined
+  const src = item.src?.trim()
+  if (!src) return undefined
+  const posterPath =
+    item.poster?.trim() || src.replace(/\.mp4$/i, '-poster.jpg')
+  return assetUrl(posterPath)
+}
+
 export type SiteProfile = {
   name: string
   github: {
@@ -86,7 +98,6 @@ export const siteProfile: SiteProfile = {
   linkedin: 'https://www.linkedin.com/in/jeremiah-ramos-75968124a/',
   email: 'ramosthjeremiah@gmail.com',
   phone: '+63 968 611 9340',
-  address: 'Sambag II, Cebu City, Cebu, Philippines',
   resumeSrc: '/docs/Jeremiah Ramos - Resume.pdf',
   status: 'seeking interesting problems',
 }
@@ -144,6 +155,11 @@ export const projects: Project[] = [
     description:
       'Cross-platform 2.5D game. Team entry for DOST NEXT LEVEL: Esports Game Dev Challenge 2026. Built for the national esports game development track; did not place, but represents our latest shipped gameplay and trailer work.',
     credits: [
+      {
+        label: 'Dev by',
+        name: 'zydric',
+        href: 'https://github.com/zydric',
+      },
       {
         label: 'Art by',
         name: 'renzymigz',
@@ -258,12 +274,27 @@ export const projects: Project[] = [
       'Top-down pixel-art shooter, final project for Object-Oriented Programming 2, 2nd semester of 2nd year. Built in Java with libGDX. Collision detection uses spatial hashing. Team effort; unmaintained since early 2025.',
     credits: [
       {
+        label: 'Dev by',
+        name: 'zydric',
+        href: 'https://github.com/zydric',
+      },
+      {
+        label: 'Dev by',
+        name: 'siv727',
+        href: 'https://github.com/siv727',
+      },
+      {
         label: 'Pixel art by',
         name: 'renzymigz',
         href: 'https://github.com/renzymigz',
       },
     ],
     media: [
+      {
+        type: 'video',
+        src: '/media/endzone-echo/echo-3.mp4',
+        alt: 'Endzone Echo village and enterable buildings',
+      },
       {
         type: 'video',
         src: '/media/endzone-echo/echo-1.mp4',
@@ -273,11 +304,6 @@ export const projects: Project[] = [
         type: 'video',
         src: '/media/endzone-echo/echo-2.mp4',
         alt: 'Endzone Echo gameplay 2',
-      },
-      {
-        type: 'video',
-        src: '/media/endzone-echo/echo-3.mp4',
-        alt: 'Endzone Echo gameplay 3',
       },
     ],
   },

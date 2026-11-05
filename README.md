@@ -48,3 +48,9 @@ Demo videos are kept under GitHub’s 100 MB per-file limit. Re-encode oversized
 ffmpeg -i input.mp4 -vf scale=-2:720 -c:v libx264 -crf 28 -preset medium \
   -c:a aac -b:a 128k -movflags +faststart output.mp4
 ```
+
+Each portfolio MP4 needs a matching poster JPEG for carousel thumbnails (`clip.mp4` → `clip-poster.jpg`). Commit both when adding media:
+
+```bash
+ffmpeg -y -ss 1 -i public/media/path/clip.mp4 -frames:v 1 -q:v 3 public/media/path/clip-poster.jpg
+```

@@ -1,5 +1,12 @@
-import { assetUrl, type MediaItem } from '../data/portfolio'
-import { createSignal, For, Show } from 'solid-js'
+import { assetUrl, videoPosterUrl, type MediaItem } from '../data/portfolio'
+import {
+  createEffect,
+  createSignal,
+  For,
+  onCleanup,
+  onMount,
+  Show,
+} from 'solid-js'
 import ImageLightbox from './ImageLightbox'
 
 type MediaCarouselProps = {
@@ -10,9 +17,65 @@ type MediaCarouselProps = {
   lightbox?: boolean
 }
 
+function CarouselVideo(props: {
+  mediaSrc: string
+  posterSrc?: string
+  videoClass: string
+  posterClass: string
+  preload: 'none' | 'metadata' | 'auto'
+  active: boolean
+}) {
+  let videoEl: HTMLVideoElement | undefined
+  const [showPoster, setShowPoster] = createSignal(true)
+
+  createEffect(() => {
+    if (!videoEl) return
+    if (!props.active) {
+      videoEl.pause()
+      setShowPoster(true)
+    }
+  })
+
+  const onPlay = () => setShowPoster(false)
+
+  const onPause = () => {
+    const el = videoEl
+    if (el && el.currentTime < 0.25) setShowPoster(true)
+  }
+
+  return (
+    <div class="relative w-full">
+      <video
+        ref={videoEl}
+        src={props.mediaSrc}
+        preload={props.preload}
+        class={props.videoClass}
+        controls
+        muted
+        playsinline
+        onPlay={onPlay}
+        onPause={onPause}
+        onEnded={onPause}
+      >
+        <track kind="captions" />
+      </video>
+      <Show when={showPoster() && props.posterSrc}>
+        <img
+          src={props.posterSrc}
+          alt=""
+          aria-hidden
+          class={props.posterClass}
+        />
+      </Show>
+    </div>
+  )
+}
+
 function MediaSlot(props: {
   item: MediaItem
   index: number
+  active: boolean
+  warmup: boolean
   compact?: boolean
   mediaFit?: 'cover' | 'portrait'
   lightbox?: boolean
@@ -20,6 +83,7 @@ function MediaSlot(props: {
 }) {
   const hasSrc = () => Boolean(props.item.src?.trim())
   const mediaSrc = () => assetUrl(props.item.src!.trim())
+  const posterSrc = () => videoPosterUrl(props.item)
   const portrait = () => props.mediaFit === 'portrait'
   const expandable = () =>
     Boolean(props.lightbox && props.item.type === 'image' && hasSrc())
@@ -34,80 +98,102 @@ function MediaSlot(props: {
       expandable() ? 'cursor-zoom-in' : '',
     ].join(' ')
 
+  const posterOverlayClass = () =>
+    [
+      'border-border pointer-events-none absolute inset-0 z-[1] w-full border bg-black object-contain sm:object-cover',
+      props.compact ? 'aspect-[4/3]' : 'aspect-video',
+    ].join(' ')
+
+  const portraitPosterClass =
+    'pointer-events-none absolute inset-0 z-[1] h-full w-full object-contain'
+
   const expand = () => {
     if (expandable()) props.onExpand?.()
   }
 
+  const videoPreload = (): 'none' | 'metadata' | 'auto' => {
+    if (!props.warmup) return 'none'
+    return props.active ? 'auto' : 'metadata'
+  }
+
   return (
-    <Show
-      when={hasSrc()}
-      fallback={
-        <div
-          class={`border-border-dim bg-surface flex w-full flex-col items-center justify-center border border-dashed ${frameClass()}`}
-        >
-          <span class="text-accent-dim font-mono text-[10px] tracking-[0.25em] uppercase">
-            {props.item.type === 'video' ? '[ video slot ]' : '[ image slot ]'}
-          </span>
-          <span class="text-text-dim mt-2 max-w-[80%] text-center font-mono text-xs">
-            {props.item.alt ?? `media_${props.index}`}
-          </span>
-        </div>
-      }
+    <div
+      class="min-w-0"
+      classList={{
+        'relative z-0': props.active,
+        'pointer-events-none absolute inset-0 z-[-1] overflow-hidden opacity-0':
+          !props.active,
+      }}
+      aria-hidden={!props.active}
     >
       <Show
-        when={portrait()}
+        when={hasSrc()}
         fallback={
-          <Show
-            when={props.item.type === 'video'}
-            fallback={
-              <img
-                src={mediaSrc()}
-                alt={props.item.alt ?? 'media'}
-                class={coverClass()}
-                loading="lazy"
-                onClick={expand}
-              />
-            }
+          <div
+            class={`border-border-dim bg-surface flex w-full flex-col items-center justify-center border border-dashed ${frameClass()}`}
           >
-            <video
-              src={mediaSrc()}
-              class={coverClass()}
-              controls
-              muted
-              playsinline
-            >
-              <track kind="captions" />
-            </video>
-          </Show>
+            <span class="text-accent-dim font-mono text-[10px] tracking-[0.25em] uppercase">
+              {props.item.type === 'video' ? '[ video slot ]' : '[ image slot ]'}
+            </span>
+            <span class="text-text-dim mt-2 max-w-[80%] text-center font-mono text-xs">
+              {props.item.alt ?? `media_${props.index}`}
+            </span>
+          </div>
         }
       >
-        <div
-          class={`border-border flex w-full items-center justify-center overflow-hidden border bg-black ${frameClass()}`}
-        >
-          <Show
-            when={props.item.type === 'video'}
-            fallback={
-              <img
-                src={mediaSrc()}
-                alt={props.item.alt ?? 'media'}
-                class="h-full w-auto max-w-full object-contain"
-                loading="lazy"
-              />
-            }
-          >
-            <video
-              src={mediaSrc()}
-              class="h-full w-auto max-w-full object-contain"
-              controls
-              muted
-              playsinline
+        <Show
+          when={portrait()}
+          fallback={
+            <Show
+              when={props.item.type === 'video'}
+              fallback={
+                <img
+                  src={mediaSrc()}
+                  alt={props.item.alt ?? 'media'}
+                  class={coverClass()}
+                  loading={props.active ? 'eager' : 'lazy'}
+                  onClick={expand}
+                />
+              }
             >
-              <track kind="captions" />
-            </video>
-          </Show>
-        </div>
+              <CarouselVideo
+                mediaSrc={mediaSrc()}
+                posterSrc={posterSrc()}
+                videoClass={coverClass()}
+                posterClass={posterOverlayClass()}
+                preload={videoPreload()}
+                active={props.active}
+              />
+            </Show>
+          }
+        >
+          <div
+            class={`border-border relative flex w-full items-center justify-center overflow-hidden border bg-black ${frameClass()}`}
+          >
+            <Show
+              when={props.item.type === 'video'}
+              fallback={
+                <img
+                  src={mediaSrc()}
+                  alt={props.item.alt ?? 'media'}
+                  class="h-full w-auto max-w-full object-contain"
+                  loading={props.active ? 'eager' : 'lazy'}
+                />
+              }
+            >
+              <CarouselVideo
+                mediaSrc={mediaSrc()}
+                posterSrc={posterSrc()}
+                videoClass="h-full w-auto max-w-full object-contain"
+                posterClass={portraitPosterClass}
+                preload={videoPreload()}
+                active={props.active}
+              />
+            </Show>
+          </div>
+        </Show>
       </Show>
-    </Show>
+    </div>
   )
 }
 
@@ -118,11 +204,30 @@ function slideLabel(i: number) {
 export default function MediaCarousel(props: MediaCarouselProps) {
   const [index, setIndex] = createSignal(0)
   const [lightboxOpen, setLightboxOpen] = createSignal(false)
+  const [warmup, setWarmup] = createSignal(false)
+  let rootEl: HTMLDivElement | undefined
+
   const count = () => props.items.length
   const hasMultiple = () => count() > 1
   const progress = () => ((index() + 1) / count()) * 100
   const compact = () => Boolean(props.compact)
   const currentItem = () => props.items[index()]
+
+  onMount(() => {
+    const el = rootEl
+    if (!el) return
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries.some((e) => e.isIntersecting)) {
+          setWarmup(true)
+        }
+      },
+      { rootMargin: '320px 0px', threshold: 0.01 },
+    )
+    observer.observe(el)
+    onCleanup(() => observer.disconnect())
+  })
 
   const prev = () => setIndex((i) => (i - 1 + count()) % count())
   const next = () => setIndex((i) => (i + 1) % count())
@@ -162,7 +267,7 @@ export default function MediaCarousel(props: MediaCarouselProps) {
   }
 
   return (
-    <div class="border-border bg-surface border">
+    <div class="border-border bg-surface border" ref={rootEl}>
       <Show when={!compact()}>
         <div class="border-border flex flex-wrap items-center justify-between gap-2 border-b px-2 py-2 sm:px-3">
           <span class="text-text-dim max-w-[55%] truncate font-mono text-[10px] tracking-widest uppercase sm:max-w-none">
@@ -208,14 +313,22 @@ export default function MediaCarousel(props: MediaCarouselProps) {
               : undefined
           }
         >
-          <MediaSlot
-            item={props.items[index()]}
-            index={index()}
-            compact={compact()}
-            mediaFit={props.mediaFit}
-            lightbox={props.lightbox}
-            onExpand={openLightbox}
-          />
+          <div class="relative grid [&>*]:col-start-1 [&>*]:row-start-1">
+            <For each={props.items}>
+              {(item, i) => (
+                <MediaSlot
+                  item={item}
+                  index={i()}
+                  active={index() === i()}
+                  warmup={warmup()}
+                  compact={compact()}
+                  mediaFit={props.mediaFit}
+                  lightbox={props.lightbox}
+                  onExpand={openLightbox}
+                />
+              )}
+            </For>
+          </div>
 
           <Show when={hasMultiple()}>
             <div class="pointer-events-none absolute inset-0 flex items-center justify-between px-0.5">
