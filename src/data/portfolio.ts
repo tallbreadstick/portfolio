@@ -97,7 +97,6 @@ export const siteProfile: SiteProfile = {
   },
   linkedin: 'https://www.linkedin.com/in/jeremiah-ramos-75968124a/',
   email: 'ramosthjeremiah@gmail.com',
-  phone: '+63 968 611 9340',
   resumeSrc: '/docs/Jeremiah Ramos - Resume.pdf',
   status: 'seeking interesting problems',
 }
